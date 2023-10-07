@@ -30,6 +30,120 @@ You can build the Dashboard as either a web App or a mobile App written in Expo.
 
 # The solution <a name="solution"></a>
 
+### Implementation
+
+This will have 3 projects, a server, client project(greenleaf) inside solution folder and edge project.
+
+you can run it local or connect the client and edge device to my live solution on azure, for details on setup go to Setup and look at local, remote or private remote setup.
+
+### MQTT and WS MQTT  Endpoints
+
+you will find all topic for mqtt under the server routes folder in the wsmqtt.js file
+
+device/devices are referencing  esp32 devices and not the client app.
+
+ 
+
+- devices // can be used by any device even when not logged in
+- devices/<deviceName>/profile to update device profile like location and password or FW to use and if auto update is on
+- update : server will send an array whit latest FW for all builds, now its “dev” and “prod” this is for any device that are set to auto update
+- locations/<location>/alarm : will send warning or alarm values on change it will send if alarm is on/off, type and alarm text.
+- locations/<location>/live : used to send live humidity, temperature and calculated lux level(server will only store every 10 min)
+- locations/<location>/light : will only be sent once pr day, it will send hours of sunlight and hours of lamp light per day
+- locations/update: devices sends a location and gets back a city for that location, this is for when the client app updates the location of a device it needs to find what city the location is in so the weather API can get the correct temperatures
+
+### HTTP Endpoint
+
+Are bit many to name them all but the main ones are
+
+- locations
+- Devices
+- Login
+
+Each endpoint has its own file in the server project under routes named after the  main endpoints. 
+
+### Server Project
+
+Our server, built on Node.js and Express, incorporates several additional libraries and services used beyond the standard ones. These include:
+
+- nodemailer
+- aedes
+- bcrypt (for generating hashed and salted user passwords)
+- crypto (to encrypt cookies, thereby preventing plain text signing)
+- expo-server-sdk (for push notifications)
+- mongoose
+- websocket-stream and ws (for running aedes over websocket)
+- this project runs both local and on Azure cloud whit mongodb cluster
+
+The server operates three services: MQTT over TCP, MQTT over WebSocket, and HTTP. MQTT caters to the edge device, whereas MQTT over WebSocket serves the client project as I haven't identified a reliable MQTT library for react native that supports MQTT over TCP.
+
+Both MQTT servers have been configured to use the same event listeners. This design allows the client and edge device to communicate effectively, regardless of whether they operate on different ports or protocols. When an alarm event occurs or the edge device stops transmitting data (triggering a keepalive event after 30 seconds), the server sends push notifications and emails to the client app/email. Push notification only works on a real phone so test it you need expo go on your phone.
+
+We use signed and encrypted cookies for persistent sign-ins, once a username and password have been provided. Passwords are hashed with unique salts, ensuring identical passwords do not result in the same hash. This is facilitated through the bcrypt and crypto libraries.
+
+Certain routes require login, and some even necessitate admin privileges. MQTT also employs username and password authentication, controlling who can publish and subscribe to various topics.
+
+Every 10 seconds, the server scans the firmware (FW) folder for files in the format `fw/dev/fw-dev-vX.bin` or `fw/prod/fw-prod-vX.bin` (where X is a version number). It then identifies the latest version for each build and publishes it on the "update" topic, allowing devices to identify the newest version.
+
+I use dev for local testing and then prod for when the device should connect to the azure VM running.(still need to setup the edge device from the hotspot, see Edge device for details)
+
+Push notifications can fail at two points, and if not properly handled, your app's push notification functionality may be disabled. To counter this, we remove a token associated with a user if it fails during execution. We also record the ticket ID and token for that ticket, checking 10 minutes later (or up to 30 minutes for production) to verify if the push notification was successful.
+
+Considering each user may have multiple devices, we store tokens in an array within the userModel. Simultaneously, we store tickets and tokens for verification in the validTokenModel.
+
+### Edge Device Project
+
+The device will transmit the follow data:
+
+- lux, temp and humidity will be transmitted live
+- sun light data for each day will be sent once each day.
+- there will be total of 17 alarms/warnings and status messages sent
+- they will only be published on value changed.
+- door alarm will also need too be open for a set amount of time before it get sent as an alarm
+
+The edge device will transmit live data pertaining to light (lux), temperature, and humidity. It will issue alarms or warnings for high or low levels of these measurements, with specific thresholds detailed in the Monitoring section.
+
+The device calculates lux based on the input from both light sensors. It will also interface with the Weather API to fetch external temperature data every 10 minutes.
+
+The device uses an accelerometer to check the window's state, determining whether it's open or closed. It calculates the angle based on gravitational force, with an angle above 3 degrees indicating the window is open. If the window is open and the outside temperature is below 24 degrees, it sends an alarm. Similarly, if the temperature exceeds 24 degrees with clear skies and the window is closed, it sends an alarm. The device also triggers an alarm if the door remains open for an extended period.
+
+The device broadcasts data over MQTT and uses HTTP for firmware downloads. If the device is set to auto-update, it will automatically update its firmware as soon as a new version is uploaded to the server. More information on this can be found in the Server Project section.
+
+The edge device will fist start a hotspot called “ESP-WIFI-MANAGER “ on ip 192.168.4.1 where you setup your WIFI details and give the device a static IP for your network, then add inn the IP for where the Server is running.
+ MQTT and http server should be the same IP.
+
+The device will then connect too the given WIFI network and connect to the server, it will also start a new server on the static IP you gave where you can restart the hotspot if you need too change the settings.
+
+If the device loses connection to the MQTT server over long period of time it will disconnect from the WIFI and restart the hotspot. 
+When ever a device connects or reconnects due to a restart or a new device is connecting. the device will run thru all alarms and switch them on/off to test that all alarms are working and that the correct values get set. This will mean email and push notification will be triggered for each Alarm.
+
+### Client Application Project
+
+This project is built using React Native.
+
+Key libraries utilized, in addition to standard React/React Native Expo libraries, include:
+
+- react-native-picker/picker
+- react-native-paho-mqtt
+- expo-notifications
+- react-native-chart-kit
+
+Primary application screens include:
+
+- Login: User authentication.
+- Devices: Manage device settings, such as location or firmware.
+- Locations: Create, modify, or delete locations.
+- Main: Access main application features.
+- Create User: Register new device credentials or create a new user (with potential for admin access after DB edit).
+- Main Dashboard: Monitor statistics for a chosen location.
+- Lux/Temp/Humidity Dashboard: View 1h, 6h, and 24h graphs for each dataset.
+- Sun Dashboard: Display the past 3 days of sunlight hours versus lamp light for plants.
+- Logs: View history and current status (ON/OFF) of all alarms and warnings that have been activated at least once.
+- Error: Redirect to this page in case of errors like missing or incorrect cookies, or wrong password/username.
+
+The application communicates with the server using HTTP and employs MQTT for receiving live data and alarm statuses from the edge device at a particular location.
+
+When loaded onto a physical device via Expo Go, the application can also receive push notifications. If an alarm or warning occurs and the user clicks on the push notification, they will be directed to the dashboard of the location where the alarm was triggered to check the logs. Notifications function even when the app isn't actively being used.
 
 # How to setup <a name="setup"></a>
 ## Perquisites
