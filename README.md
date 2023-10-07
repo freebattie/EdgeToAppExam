@@ -2,15 +2,15 @@
 My solution in exam in edge(esp-32) to app(react native)
 This repo is a collection off the reapos i created in my exam EdgeToApp
 ##### Table of Contents 
-1. [Question](#Question)
-2. [Planning](#Planning)
-3. [Solution](#Solution)
-4. [Setup](#Setup)
+1. [Question](#question)
+2. [Planning](#planning)
+3. [Solution](#solution)
+4. [Setup](#setup)
 5. [repo Links](#links)
 
 
 
-## Question <a name="Question"></a>
+## Question <a name="question"></a>
 
 Greenhouse system
 
@@ -25,12 +25,12 @@ The requirements are:
 
 You can build the Dashboard as either a web App or a mobile App written in Expo. If you are able to come up reasons to use other sensors in the Edge device, please do so. If you think the Dashboard needs more than just a graph, you are free to add features to the solution. Draw on your experience from the obligatory submissions and lectures to get ideas for good additions
 
-## Planning <a name="Planning"></a>
+## Planning <a name="planning"></a>
 
 
-## Solution <a name="Solution"></a>
+## Solution <a name="solution"></a>
 
 
-## Setup <a name="Setup"></a>
+## Setup <a name="setup"></a>
 
 ## repo Links <a name="links"></a>
