@@ -27,7 +27,100 @@ You can build the Dashboard as either a web App or a mobile App written in Expo.
 
 # The planning <a name="planning"></a>
 
+### Note
 
+When making the video i forgot to mention that i also send email notification on alarm and that the grow light is yellow and turn on when there is too low lux, the total hours are calculated  at end of the day and sent, if it changes from sunlight/lamplight and less then half an hour has passed it will register 0h and above 30 min will be seen as 1h,so 1,23h will be 1 h and 2.44h will be 3h.
+
+## Research
+
+I looked in to how to find how much sun plants need and lux is most used value so added some information about lux values, also looked in to what the plants needed for best possible growing condition. I look over the data and write what values I will use and why then create a list of requirements that will be needed and a list of what we will monitor.
+
+### Lux values
+
+- **Bright Summer Day:** 100,000 Lux (~10,000 footcandles)
+- **Full Daylight:** 10,000 Lux (~1,000 footcandles)
+- **Overcast Day:** 1,000 Lux (~100 footcandles)
+- **Traditional Office Lighting:** 300-500 Lux (30-50 footcandles)
+- **Common Stairway:** 50-100 Lux (5-10 footcandles)
+- **Twilight:** 10 Lux (1 footcandle)
+- **Full Moon:** <1 Lux (<0.1 footcandle)
+
+(Crane & Balerdi, 2020; Philips, n.d.)
+
+(arbediskrav1)
+
+### Bananas
+
+- least 12 hours of sunlight. or 6 to 8 hours.
+- well drained soil and water it good
+- lot of humidity; at least 50% or higher
+- Optimal temp 26 to 32 Celsius, stop growing at 15 and dies under 0
+
+(Crane & Balerdi, 2020)
+
+(arbediskrav1)
+
+### Pineapples
+
+- Pineapple plants do not tolerate temperatures below -2 degrees Celsius and grow slower below 15.5 or over 32 degrees Celsius.
+- The optimal temperature is between 20-30 degrees Celsius.
+- Pineapples grow naturally in consistent humidity from 40 to 60 percent.
+- The plants require at least 6 hours of direct sunlight per day.
+
+(Crane, 2020; Gillette, 2023)
+
+(arbediskrav1)
+
+### Optimal Greenhouse Growing Conditions
+
+Optimal conditions for plant growth in the greenhouse include maintaining temperatures between 24 and 30 degrees Celsius. Plant growth slows significantly around 14 degrees and ceases entirely below 0. Therefore, 24 degrees should serve as the threshold for a warning signal. If temperatures fall below this, the heater should engage to restore optimal conditions.
+
+Humidity levels should ideally be kept constant, between 60% and 90%. If levels fluctuate beyond a 5% range, a warning should be issued. Extreme conditions below 50% or above 90% should trigger an alarm.
+
+Plants thrive under direct sunlight, so when it's sunny and hot outside, users should be advised to open the greenhouse windows. However, the indoor temperature should remain stable, and if it's cold outside, the windows should be closed to conserve heat. The door's state, open or closed, should also be monitored.
+
+A minimum of 8 hours of sunlight is essential for optimal growth. If sunlight is insufficient, artificial grow lights should supplement it.
+
+The window should be open when the outdoor temperature exceeds 24 degrees and it's sunny, to harness as much natural sunlight as possible. When temperatures fall below 24, the window should be closed.
+
+Although there isn't a specific soil moisture sensor, the humidity sensor can provide an indication of when the plants need watering. If the humidity level drops below 50%, it's likely that the plants require watering.
+
+Based on research (Crane & Balerdi, 2020; Philips, n.d.), a sunny day typically has a lux level over 10,000, and lower-end grow lamps provide about 5,000 lux. Indoor measurements showed a lux level of 300 with the lights on. In a production scenario, the grow lamps would turn on when lux levels drop below 5,000. For indoor applications, the threshold is set to 300 lux.
+
+## Requirements
+
+- Maintain temperature between 24 and 30 degrees Celsius.
+- Issue a warning and push notification if temperature falls below 24 degrees.
+- Trigger an alarm, send an email, and push notification if temperature falls below 14 degrees.
+- Keep humidity constant.
+- Issue a warning if humidity falls below 55% or rises above 65%.
+- Trigger an alarm if humidity falls below 50% or rises above 90%.
+- Try to ensure that plants get 8 hours of sunlight or artificial light per day.
+- Monitor outdoor weather to manage window states.
+- Monitor heater functionality.
+- Utilize grow lights as necessary.
+- Warn the user of sensor failure or if the device disconnects.
+- All alarms should trigger an email and push notification (functional on real phones only, not simulators).
+
+## Monitoring
+
+The following parameters should be monitored:
+
+- Temperature (°C)
+- Humidity (%)
+- Light (lux)
+- Heater (on/off)
+- Window position (degrees)
+- Grow light status (on/off)
+- WIFI/MQTT status indicator (on/off)
+- Door status (open/close)
+- Connectivity status (online/offline)
+
+The door status will be determined using a hall sensor and magnet. The window position will be evaluated using an accelerometer, converting the value into degrees to assess whether the window is open or closed.
+
+The OpenWeatherAPI will be used to monitor outdoor temperatures. If temperatures exceed 24 degrees, an alarm will be triggered if the window is closed. Conversely, if the temperature is below 24 and the window is open, an alarm will be triggered.
+
+An RGB light will be used to simulate a grow lamp (yellow) and to indicate alarms (red) when WiFi, MQTT, or sensor failures occur.
 # The solution <a name="solution"></a>
 
 ### Implementation
