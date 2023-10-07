@@ -10,7 +10,7 @@ This repo is a collection off the reapos i created in my exam EdgeToApp
 
 
 
-## Question <a name="question"></a>
+# Question <a name="question"></a>
 
 Greenhouse system
 
@@ -25,13 +25,13 @@ The requirements are:
 
 You can build the Dashboard as either a web App or a mobile App written in Expo. If you are able to come up reasons to use other sensors in the Edge device, please do so. If you think the Dashboard needs more than just a graph, you are free to add features to the solution. Draw on your experience from the obligatory submissions and lectures to get ideas for good additions
 
-## The planning <a name="planning"></a>
+# The planning <a name="planning"></a>
 
 
-## The solution <a name="solution"></a>
+# The solution <a name="solution"></a>
 
 
-## How to setup <a name="setup"></a>
+# How to setup <a name="setup"></a>
 ## Perquisites
 
 - Node and Npm
