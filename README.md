@@ -4,10 +4,10 @@ This repo is a collection off the reapos i created in my exam EdgeToApp
 ##### Table of Contents 
 1. [Question](#question)
 2. [Short Description](#sum)
-3. [Planning](#planning)
-4. [Solution](#solution)
-5. [Setup](#setup)
-6. [repo Links](#links)
+3.  [repo Links](#links)
+4. [Planning](#planning)
+5. [Solution](#solution)
+6. [Setup](#setup)
 
 
 
@@ -29,6 +29,11 @@ You can build the Dashboard as either a web App or a mobile App written in Expo.
 # Summary  <a name="sum"></a>
 The EdgeToAppExam solution is designed to facilitate greenhouse monitoring by seamlessly connecting edge devices (ESP-32 microcontrollers) to a user-friendly React Native mobile application. It collects essential environmental data, including temperature, humidity, and light levels, and securely transmits it to a Node.js server via MQTT. The server manages user authentication, real-time data visualization, and notifications, ensuring users can monitor greenhouse conditions effortlessly. With features like alarms, warnings, and firmware updates for edge devices, the solution empowers clients to maintain optimal plant growth conditions across multiple greenhouse locations, all while providing flexibility for future expansions and customizations.
 
+# Repo Links <a name="links"></a>
+
+#### [Edge Device Solution](https://github.com/freebattie/edge)
+#### [Server Solution](https://github.com/freebattie/server)
+#### [Cross Plattform Solution](https://github.com/freebattie/greenleaf)
 # The planning <a name="planning"></a>
 
 ### Note
@@ -515,9 +520,5 @@ sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-po
 ```
 
 or you will need to give SUDO privileges when running server.
-# repo Links <a name="links"></a>
 
-## [Edge Device Solution](https://github.com/freebattie/edge)
-## [Server Solution](https://github.com/freebattie/server)
-## [Cross Plattform Solution](https://github.com/freebattie/greenleaf)
 
