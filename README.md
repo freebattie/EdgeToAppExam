@@ -3,10 +3,11 @@ My solution in exam in edge(esp-32) to app(react native)
 This repo is a collection off the reapos i created in my exam EdgeToApp
 ##### Table of Contents 
 1. [Question](#question)
-2. [Planning](#planning)
-3. [Solution](#solution)
-4. [Setup](#setup)
-5. [repo Links](#links)
+2. [Short Description](#sum)
+3. [Planning](#planning)
+4. [Solution](#solution)
+5. [Setup](#setup)
+6. [repo Links](#links)
 
 
 
@@ -24,6 +25,9 @@ The requirements are:
 - Deliver a video showing the final solution, all required code and written documentation. The reviewer should be able to replicate your solution.
 
 You can build the Dashboard as either a web App or a mobile App written in Expo. If you are able to come up reasons to use other sensors in the Edge device, please do so. If you think the Dashboard needs more than just a graph, you are free to add features to the solution. Draw on your experience from the obligatory submissions and lectures to get ideas for good additions
+
+# Summary  <a name="sum"></a>
+The EdgeToAppExam solution is designed to facilitate greenhouse monitoring by seamlessly connecting edge devices (ESP-32 microcontrollers) to a user-friendly React Native mobile application. It collects essential environmental data, including temperature, humidity, and light levels, and securely transmits it to a Node.js server via MQTT. The server manages user authentication, real-time data visualization, and notifications, ensuring users can monitor greenhouse conditions effortlessly. With features like alarms, warnings, and firmware updates for edge devices, the solution empowers clients to maintain optimal plant growth conditions across multiple greenhouse locations, all while providing flexibility for future expansions and customizations.
 
 # The planning <a name="planning"></a>
 
