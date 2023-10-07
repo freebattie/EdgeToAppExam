@@ -515,4 +515,9 @@ sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-po
 ```
 
 or you will need to give SUDO privileges when running server.
-## repo Links <a name="links"></a>
+# repo Links <a name="links"></a>
+
+## [Edge Device Solution](https://github.com/freebattie/edge)
+## [Server Solution](https://github.com/freebattie/server)
+## [Cross Plattform Solution](https://github.com/freebattie/greenleaf)
+
